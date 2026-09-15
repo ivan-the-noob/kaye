@@ -87,18 +87,45 @@
   .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
   .mobile-nav{
-    display:none;overflow:hidden;max-height:0;
-    background:rgba(6,18,32,.98);border-top:1px solid var(--line-soft);
-    transition:max-height .42s var(--ease);
+    display:none;position:fixed;inset:0;z-index:70;
+    height:100%;width:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    background:
+      radial-gradient(700px 460px at 80% 0%,rgba(46,143,240,.26),transparent 62%),
+      linear-gradient(165deg,#0B2038 0%,#08182A 48%,#05101D 100%);
+    opacity:0;visibility:hidden;transform:scale(1.015);
+    transition:opacity .38s var(--ease),transform .38s var(--ease),visibility .38s;
   }
-  .mobile-nav.open{max-height:460px}
-  .mobile-nav .inner{padding:12px 0 22px;display:flex;flex-direction:column}
-  .mobile-nav a{
-    padding:14px 4px;color:#C2D6E9;text-decoration:none;font-size:15.5px;font-weight:500;
-    border-bottom:1px solid var(--line-soft);transition:color .2s,padding-left .24s var(--ease);
+  .mobile-nav.open{opacity:1;visibility:visible;transform:none}
+  .mn-inner{min-height:100%;display:flex;flex-direction:column;padding-bottom:34px}
+  .mn-top{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:66px;border-bottom:1px solid var(--line-soft)}
+  .mn-close{
+    width:44px;height:44px;flex:0 0 auto;position:relative;cursor:pointer;
+    border:1px solid var(--line-dark);background:rgba(255,255,255,.06);border-radius:11px;
+    transition:background .24s,border-color .24s;
   }
-  .mobile-nav a:hover,.mobile-nav a:focus{color:#fff;padding-left:10px}
-  .mobile-nav .btn{margin-top:18px}
+  .mn-close:hover{background:rgba(255,255,255,.13);border-color:rgba(160,200,240,.44)}
+  .mn-close::before,.mn-close::after{content:"";position:absolute;left:50%;top:50%;width:18px;height:2px;background:#DCEAF7;border-radius:2px}
+  .mn-close::before{transform:translate(-50%,-50%) rotate(45deg)}
+  .mn-close::after{transform:translate(-50%,-50%) rotate(-45deg)}
+  .mn-links{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;padding:30px 0}
+  .mn-links a{
+    display:flex;align-items:baseline;gap:14px;text-decoration:none;
+    font-family:var(--display);font-weight:800;font-size:clamp(25px,7.2vw,38px);letter-spacing:-.032em;
+    color:#EAF2FA;padding:11px 0;border-bottom:1px solid rgba(150,190,230,.08);
+    opacity:0;transform:translateY(18px);transition:color .22s,padding-left .26s var(--ease);
+  }
+  .mn-links a:hover,.mn-links a:focus{color:#8FC2F5;padding-left:8px}
+  .mn-links a i{
+    font-style:normal;font-family:var(--body);font-size:11.5px;font-weight:500;
+    letter-spacing:.14em;color:var(--blue-400);flex:0 0 auto;
+  }
+  .mobile-nav.open .mn-links a{animation:mnIn .52s var(--ease) forwards;animation-delay:calc(.055s * var(--i,0))}
+  @keyframes mnIn{to{opacity:1;transform:none}}
+  .mn-foot{display:grid;gap:11px;padding-top:26px;border-top:1px solid var(--line-soft)}
+  .mn-foot .mn-contact{display:flex;flex-direction:column;gap:3px;text-decoration:none}
+  .mn-foot .mn-contact span{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-300);font-family:var(--display)}
+  .mn-foot .mn-contact b{font-weight:500;font-size:15px;color:#DCEAF7}
+  body.menu-open{overflow:hidden}
 
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:9px;
@@ -439,6 +466,7 @@
     .r1,.r2,.r3{animation:none}
     .pulse,.orb,.marquee-track,.dot.active::after{animation:none}
     .js .reveal{opacity:1;transform:none}
+    .mobile-nav.open .mn-links a{animation:none;opacity:1;transform:none}
     .track{transition:none}
     *{transition-duration:.01ms!important}
   }
@@ -472,16 +500,26 @@
       <span></span><span></span><span></span>
     </button>
   </div>
-  <div class="mobile-nav" id="mobileNav">
-    <div class="container inner">
-      <a href="#services">Services</a>
-      <a href="#process">Process</a>
-      <a href="#experience">Experience</a>
-      <a href="#toolkit">Toolkit</a>
-      <a href="#availability">Availability</a>
-      <a href="#engagement">Engagement</a>
-      <a href="#faq">FAQ</a>
-      <a class="btn btn-primary" href="#contact">Get in touch <span class="arw">&rarr;</span></a>
+  <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="container mn-inner">
+      <div class="mn-top">
+        <a class="brand" href="#top"><b>Kaye P. Jugo</b><span>Real Estate VA</span></a>
+        <button class="mn-close" id="navClose" type="button" aria-label="Close menu"></button>
+      </div>
+      <nav class="mn-links">
+        <a href="#services" style="--i:1"><i>01</i> Services</a>
+        <a href="#process" style="--i:2"><i>02</i> Process</a>
+        <a href="#experience" style="--i:3"><i>03</i> Experience</a>
+        <a href="#toolkit" style="--i:4"><i>04</i> Toolkit</a>
+        <a href="#availability" style="--i:5"><i>05</i> Availability</a>
+        <a href="#engagement" style="--i:6"><i>06</i> Engagement</a>
+        <a href="#faq" style="--i:7"><i>07</i> FAQ</a>
+      </nav>
+      <div class="mn-foot">
+        <a class="mn-contact" href="mailto:kaye.virtual@gmail.com"><span>Email</span><b>kaye.virtual@gmail.com</b></a>
+        <a class="mn-contact" href="tel:+639925796493"><span>Phone</span><b>0992 579 6493</b></a>
+        <a class="btn btn-primary" href="#contact">Get in touch <span class="arw">&rarr;</span></a>
+      </div>
     </div>
   </div>
 </header>
@@ -959,16 +997,21 @@
   toTop.addEventListener('click',function(){ window.scrollTo({top:0,behavior:reduce?'auto':'smooth'}); });
 
   /* ---- mobile menu ---- */
-  var toggle=document.getElementById('navToggle'),mob=document.getElementById('mobileNav');
-  function closeMenu(){ toggle.setAttribute('aria-expanded','false'); mob.classList.remove('open'); toggle.setAttribute('aria-label','Open menu'); }
-  toggle.addEventListener('click',function(){
-    var open=toggle.getAttribute('aria-expanded')==='true';
-    toggle.setAttribute('aria-expanded',String(!open));
-    toggle.setAttribute('aria-label',open?'Open menu':'Close menu');
-    mob.classList.toggle('open',!open);
-  });
+  var toggle=document.getElementById('navToggle'),mob=document.getElementById('mobileNav'),
+      navClose=document.getElementById('navClose');
+  function setMenu(open){
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.setAttribute('aria-label',open?'Close menu':'Open menu');
+    mob.classList.toggle('open',open);
+    document.body.classList.toggle('menu-open',open);
+    if(open){ navClose.focus(); }
+  }
+  function closeMenu(){ setMenu(false); }
+  toggle.addEventListener('click',function(){ setMenu(toggle.getAttribute('aria-expanded')!=='true'); });
+  navClose.addEventListener('click',function(){ closeMenu(); toggle.focus(); });
   mob.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeMenu); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeMenu(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&mob.classList.contains('open')){ closeMenu(); toggle.focus(); } });
+  window.addEventListener('resize',function(){ if(window.innerWidth>=992&&mob.classList.contains('open')) closeMenu(); });
 
   /* ---- reveal on scroll ---- */
   var revealEls=[].slice.call(document.querySelectorAll('.reveal'));
