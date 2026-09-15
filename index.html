@@ -96,7 +96,7 @@
     transition:opacity .38s var(--ease),transform .38s var(--ease),visibility .38s;
   }
   .mobile-nav.open{opacity:1;visibility:visible;transform:none}
-  .mn-inner{min-height:100%;display:flex;flex-direction:column;padding-bottom:34px}
+  .mn-inner{min-height:100%;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:34px}
   .mn-top{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:66px;border-bottom:1px solid var(--line-soft)}
   .mn-close{
     width:44px;height:44px;flex:0 0 auto;position:relative;cursor:pointer;
@@ -146,7 +146,7 @@
 
   @media(max-width:991.98px){
     .nav{display:none}
-    .topbar .btn-primary{display:none}
+    .topbar-in .btn-primary{display:none}
     .nav-toggle{display:flex}
     .mobile-nav{display:block}
   }
@@ -500,7 +500,9 @@
       <span></span><span></span><span></span>
     </button>
   </div>
-  <div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Menu">
+</header>
+
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Menu">
     <div class="container mn-inner">
       <div class="mn-top">
         <a class="brand" href="#top"><b>Kaye P. Jugo</b><span>Real Estate VA</span></a>
@@ -520,9 +522,8 @@
         <a class="mn-contact" href="tel:+639925796493"><span>Phone</span><b>0992 579 6493</b></a>
         <a class="btn btn-primary" href="#contact">Get in touch <span class="arw">&rarr;</span></a>
       </div>
-    </div>
   </div>
-</header>
+</div>
 
 <section class="hero" id="top">
   <span class="orb orb-a"></span>
